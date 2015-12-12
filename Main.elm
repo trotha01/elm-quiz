@@ -10,13 +10,11 @@ import StartApp.Simple as StartApp
 {- Add Point System
 -}
 
-main =
-  StartApp.start { model = model, view = view, update = update }
-
 -- MODEL
 
 type alias Model =
-    {question:Question.Model}
+    { question:Question.Model
+    , points:Int }
 
 model : Model
 model =
@@ -30,7 +28,7 @@ update : Action -> Model -> Model
 update action model =
   case action of
     UpdateQuestion a ->
-        {model|question=Question.update a model.question}
+        { model | question=Question.update a model.question }
 
 -- VIEW
 
@@ -42,29 +40,7 @@ view address model =
         model.question
     ]
 
-{-
-question : Model -> Signal.Address Action -> Html
-question model address =
-    div []
-    [ div [] [ text model.question.question ]
-    , input
-         [ on "input" (targetValue) (Signal.message address << UserInput ) ]
-         []
-    , button [ onClick address CheckAnswer ] [ text "Submit" ]
-    ]
+-- UPDATE
 
-answer : Model -> Html
-answer model = 
-    case model.state of
-        Waiting ->
-            span [] []
-        Answered ->
-            if model.question.isCorrect model.input then
-                div []
-                [ text "Excellent!!!" ]
-            else
-                div []
-                [ text "Please try again" ]
-
-
--}
+main =
+  StartApp.start { model = model, view = view, update = update }
