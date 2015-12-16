@@ -1,4 +1,5 @@
 module Question (Model, init, Action, update, view) where
+
 import Html exposing (Html, div, button, text, input, span)
 import Html.Events exposing (onClick, targetValue, on)
 
@@ -13,16 +14,20 @@ type alias Model =
 type State =
     Waiting | Answered
 
-init : Model
-init = { state=Waiting
-       , question="What is the capital of France?"
-       , isCorrect=\s -> s == "Paris"
-       , input=""
-       }
+init : String -> String -> Model
+init question answer =
+    { state=Waiting
+    , question=question
+    , isCorrect=\s -> s == answer
+    , input=""
+    }
 
 -- Update
 
-type Action = CheckAnswer | UserInput String
+type Action =
+    CheckAnswer
+    | UserInput String
+    | AddPoints Int
 
 update : Action -> Model -> Model
 update action model =
@@ -31,6 +36,8 @@ update action model =
         {model|state=Answered}
     UserInput s ->
         {model|input=s}
+    AddPoints _ ->
+        model
 
 -- View
 
