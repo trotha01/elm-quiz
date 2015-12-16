@@ -10,7 +10,6 @@ import StartApp.Simple as StartApp
 
 -- TODO
 {- Add Point System
- - Add question list
 -}
 
 -- MODEL
@@ -54,17 +53,11 @@ update action model =
          in { model | questions = List.map updateQuestion model.questions }
     NextQuestion currentID ->
         let nextQuestion =
-            if currentID < List.length model.questions - 1 then
-               currentID + 1
-            else
-               currentID
+            min (currentID + 1) (List.length model.questions - 1)
          in { model | currentQuestion = nextQuestion}
     PreviousQuestion currentID ->
         let previousQueston =
-            if currentID == 0 then
-               currentID
-            else
-               currentID - 1
+            max 0 (currentID - 1)
          in { model | currentQuestion = previousQueston }
 
 -- VIEW
@@ -90,10 +83,10 @@ view address model =
 prevButton : Signal.Address Action -> Model -> Html
 prevButton address model = 
     let enabled =
-        if (Debug.log "currentQuestion" model.currentQuestion) == 0 then
-            disabled (Debug.log "prevDisabled" True)
+        if model.currentQuestion == 0 then
+            disabled True
         else
-            disabled (Debug.log "prevDisabled" False)
+            disabled False
     in button
            [ onClick address (PreviousQuestion model.currentQuestion)
            , enabled
@@ -104,9 +97,9 @@ nextButton : Signal.Address Action -> Model -> Html
 nextButton address model = 
     let enabled =
         if model.currentQuestion == (List.length model.questions) - 1 then
-            disabled (Debug.log "prevDisabled" True)
+            disabled True
         else
-            disabled (Debug.log "prevDisabled" False)
+            disabled False
     in button
            [ onClick address (NextQuestion model.currentQuestion)
            , enabled
