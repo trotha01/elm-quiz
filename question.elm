@@ -16,10 +16,10 @@ type State =
 
 init : String -> String -> Model
 init question answer =
-    { state=Waiting
-    , question=question
-    , isCorrect=\s -> s == answer
-    , input=""
+    { state = Waiting
+    , question = question
+    , isCorrect = (==) answer
+    , input = ""
     }
 
 -- Update

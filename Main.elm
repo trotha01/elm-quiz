@@ -75,9 +75,9 @@ view address model =
      in div []
         [
           Points.view model.points
-        , questionView
         , prevButton address model
         , nextButton address model
+        , questionView
         ]
 
 prevButton : Signal.Address Action -> Model -> Html
